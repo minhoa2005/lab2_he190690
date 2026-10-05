@@ -1,0 +1,24 @@
+import React from "react";
+import { movies } from "../datas/movies";
+
+export default function GenreFilter({ filter, setFilter }) {
+  const getGenres = () => {
+    const genres = [];
+    movies.forEach((m) => {
+      if (!genres.includes(m.genre)) {
+        genres.push(m.genre);
+      }
+    });
+    return genres;
+  };
+  return (
+    <select className="form-select" aria-label="Default select example">
+      <option selected value="all">
+        All Genres
+      </option>
+      {getGenres().map((g) => (
+        <option value={g}>{g}</option>
+      ))}
+    </select>
+  );
+}

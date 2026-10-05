@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { ThemeContext, ThemeProvider, useTheme } from "./context/ThemeContext";
+import Header from "./components/Header";
+import MovieList from "./components/MovieList";
+import SearchBar from "./components/SearchBar";
+import GenreFilter from "./components/GenreFilter";
+import { useEffect, useRef, useState } from "react";
+import { movies } from "./datas/movies";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
+  const { theme } = useTheme();
+  const [search, setSearch] = useState("");
+  const [filterGenre, setFilterGenre] = useState("all");
+  const searchRef = useRef(null);
+  const [favorite, setFavorite] = useLocalStorage("favorite", []);
+  const filter = () => {
+    return movies.filter((m) => {
+      const searchResult =
+        search === "" || search.toLowerCase === m.title.toLowerCase;
+      const genre = filterGenre === "all" || filterGenre === m.genre;
+      return searchResult && genre;
+    });
+  };
+  useEffect(() => {
+    filter();
+  }, [search, filterGenre]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <div className="container">
+        <Header />
+        <div>
+          <SearchBar ref={searchRef} search={search} setSearch={setSearch} />
+          <div className="d-flex flex-row ">
+            <GenreFilter filter={filterGenre} setFilter={setFilterGenre} />
+            <select className="form-select">
+              <option>Mặc định</option>
+              <option>Rating Cao</option>
+              <option>Rating thấp</option>
+            </select>
+          </div>
+        </div>
+        <MovieList list={filter()} />
+      </div>
+    </ThemeProvider>
   );
 }
 
