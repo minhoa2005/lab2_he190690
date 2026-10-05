@@ -12,12 +12,17 @@ export default function GenreFilter({ filter, setFilter }) {
     return genres;
   };
   return (
-    <select className="form-select" aria-label="Default select example">
-      <option selected value="all">
-        All Genres
-      </option>
+    <select
+      className="form-select"
+      aria-label="Default select example"
+      value={filter}
+      onChange={(e) => setFilter(e.target.value)}
+    >
+      <option value="all">All Genres</option>
       {getGenres().map((g) => (
-        <option value={g}>{g}</option>
+        <option key={g} value={g}>
+          {g}
+        </option>
       ))}
     </select>
   );

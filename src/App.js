@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import MovieList from "./components/MovieList";
 import SearchBar from "./components/SearchBar";
 import GenreFilter from "./components/GenreFilter";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { movies } from "./datas/movies";
 import useLocalStorage from "./hooks/useLocalStorage";
 
@@ -15,17 +15,13 @@ function App() {
   const [filterGenre, setFilterGenre] = useState("all");
   const searchRef = useRef(null);
   const [favorite, setFavorite] = useLocalStorage("favorite", []);
-  const filter = () => {
-    return movies.filter((m) => {
-      const searchResult =
-        search === "" || search.toLowerCase === m.title.toLowerCase;
-      const genre = filterGenre === "all" || filterGenre === m.genre;
-      return searchResult && genre;
-    });
-  };
-  useEffect(() => {
-    filter();
-  }, [search, filterGenre]);
+  const filteredMovies = movies.filter((m) => {
+    const searchResult = m.title
+      .toLowerCase()
+      .includes(search.trim().toLowerCase());
+    const genreResult = filterGenre === "all" || filterGenre === m.genre;
+    return searchResult && genreResult;
+  });
   return (
     <ThemeProvider>
       <div className="container">
@@ -41,7 +37,7 @@ function App() {
             </select>
           </div>
         </div>
-        <MovieList list={filter()} />
+        <MovieList list={filteredMovies} />
       </div>
     </ThemeProvider>
   );
