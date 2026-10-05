@@ -23,9 +23,6 @@ function App() {
       return searchResult && genre;
     });
   };
-  useEffect(() => {
-    filter();
-  }, [search, filterGenre]);
   return (
     <ThemeProvider>
       <div className="container">
