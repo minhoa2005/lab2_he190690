@@ -14,7 +14,6 @@ export default function GenreFilter({ filter, setFilter }) {
   return (
     <select
       className="form-select"
-      aria-label="Default select example"
       value={filter}
       onChange={(e) => setFilter(e.target.value)}
     >
